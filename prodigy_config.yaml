@@ -5,7 +5,7 @@ prodigy:
   
   # Command settings
   command: spans.manual
-  dataset: phonetics_anno
+  dataset: jack_round1_1k_sample
   model: en_core_web_sm
   
   # Data settings
