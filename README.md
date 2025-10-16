@@ -79,7 +79,10 @@ The project follows a modular architecture with clear separation of concerns:
 
 ## Configuration
 
-The project uses environment-based configuration. Copy `env.example` to `.env` and customize:
+The project uses both environment-based configuration and YAML configuration files.
+
+### Environment Configuration
+Copy `env.example` to `.env` and customize:
 
 ```bash
 # Data paths
@@ -93,6 +96,26 @@ ENABLE_STOPWORD_FILTER=true
 # Sampling
 DIALOGUE_RATIO=0.5
 SAMPLE_SIZE=1000
+```
+
+### Prodigy Configuration
+Prodigy settings are configured in `prodigy_config.yaml`:
+
+```yaml
+prodigy:
+  port: 8081
+  command: spans.manual
+  dataset: phonetics_anno
+  model: en_core_web_sm
+  data_file: data/processed/samples/balanced_sample_20251016_140158.jsonl
+  loader: jsonl
+  labels: PHONETIC,NOT_DIALOGUE,ERROR
+  patterns_file: patterns.jsonl
+```
+
+You can use different config files:
+```bash
+python run_prodigy.py my_custom_config.yaml
 ```
 
 ## Development

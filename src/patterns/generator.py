@@ -7,9 +7,9 @@ from typing import Dict, List, Set
 import spacy
 from pydantic import BaseModel
 
-from ..config import get_settings
-from ..data.loaders import GBDataItem, create_loader
-from ..utils.logging import get_logger
+from config import get_settings
+from src.data.loaders import GBDataItem, create_loader
+from src.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -76,7 +76,7 @@ class PatternGenerator:
         words = list(item.words.keys())
         
         for word in words:
-            # Create variants (original and cleaned)
+            # Create variants (original and cleaned) - match original logic
             variants = {
                 word.lower(),
                 self.pattern_to_keep.sub("", word.lower())
@@ -84,9 +84,11 @@ class PatternGenerator:
             
             for variant in variants:
                 if self._is_valid_pattern(variant):
+                    # Split into tokens and create pattern - match original format
+                    tokens = [{"lower": token} for token in variant.split()]
                     pattern = Pattern(
                         label="PHONETIC",
-                        pattern=[{"lower": token} for token in variant.split()]
+                        pattern=tokens
                     )
                     patterns.append(pattern)
                     self.seen_patterns.add(variant)
@@ -123,7 +125,7 @@ class PatternGenerator:
         try:
             with open(output_file, "w", encoding="utf-8") as f:
                 for pattern in patterns:
-                    f.write(pattern.model_dump_json(ensure_ascii=False) + "\n")
+                    f.write(pattern.model_dump_json() + "\n")
             
             self.logger.info(f"Successfully saved patterns to {output_file}")
             

@@ -9,7 +9,7 @@ import structlog
 from rich.console import Console
 from rich.logging import RichHandler
 
-from ..config import get_settings
+from config import get_settings
 
 
 def setup_logging(

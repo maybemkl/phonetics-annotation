@@ -1,0 +1,20 @@
+# Prodigy Configuration
+prodigy:
+  # Server settings
+  port: 8081
+  
+  # Command settings
+  command: spans.manual
+  dataset: phonetics_anno
+  model: en_core_web_sm
+  
+  # Data settings
+  data_file: data/processed/samples/balanced_sample_20251016_140158.jsonl
+  loader: jsonl
+  labels: PHONETIC,NOT_DIALOGUE,ERROR
+  patterns_file: patterns.jsonl
+  
+  # Optional settings
+  # batch_size: 10
+  # show_instructions: true
+  # auto_save: true

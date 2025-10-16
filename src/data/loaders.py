@@ -32,6 +32,7 @@ class GeminiDataItem(BaseModel):
     speaker_in_char_list: Optional[bool] = None
     addressee: Optional[str] = None
     addressee_in_char_list: Optional[bool] = None
+    source_file: Optional[str] = None
 
 
 class DataLoader(ABC):
@@ -86,6 +87,8 @@ class GeminiDataLoader(DataLoader):
             with jsonlines.open(self.file_path) as reader:
                 for line_num, line in enumerate(reader, 1):
                     try:
+                        # Add source file name to the data
+                        line['source_file'] = self.file_path.name
                         yield GeminiDataItem(**line)
                     except Exception as e:
                         self.logger.warning(f"Failed to parse line {line_num}: {e}")
