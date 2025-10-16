@@ -1,5 +1,6 @@
-# AWS Keys
+# AWS Keys and scripts
 micke.pem
+aws_ssh.sh
 
 # macOS
 .DS_Store
