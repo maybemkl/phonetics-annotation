@@ -25,5 +25,6 @@ isort>=5.12.0
 flake8>=6.0.0
 mypy>=1.5.0
 
-# Optional: Prodigy integration
-# prodigy>=1.12.0  # Uncomment if using Prodigy programmatically
+# Prodigy (proprietary software - requires license)
+# Install from: https://prodi.gy/
+# Follow installation instructions for your platform

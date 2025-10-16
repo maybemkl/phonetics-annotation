@@ -1,7 +1,6 @@
 # Prodigy Configuration
 prodigy:
-  # Server settings
-  # host: "0.0.0.0"  # Uncomment for AWS - allows external access
+  # Server settings (host is set automatically based on --mode)
   port: 8081
   
   # Command settings

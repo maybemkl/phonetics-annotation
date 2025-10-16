@@ -53,7 +53,11 @@ python scripts/generate_patterns.py GB_0_3.jsonl -o patterns.jsonl
 
 2. **Run Prodigy annotation**:
 ```bash
-./prodigy_localhost.sh
+# Local development
+python run_prodigy.py
+
+# AWS deployment
+python run_prodigy.py --mode aws
 ```
 
 ## Architecture
@@ -115,7 +119,7 @@ prodigy:
 
 You can use different config files:
 ```bash
-python run_prodigy.py my_custom_config.yaml
+python run_prodigy.py my_custom_config.yaml --mode local
 ```
 
 ## Development
