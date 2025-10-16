@@ -24,6 +24,30 @@ def run_prodigy(config):
     env = os.environ.copy()
     env['PRODIGY_PORT'] = str(config['port'])
     
+    # Set host if specified
+    if 'host' in config:
+        env['PRODIGY_HOST'] = config['host']
+    
+    # Set CORS if specified
+    if 'cors' in config and config['cors']:
+        env['PRODIGY_CORS'] = 'true'
+    
+    # Set validation if specified
+    if 'validate' in config and config['validate']:
+        env['PRODIGY_VALIDATE'] = 'true'
+    
+    # Set database settings if specified
+    if 'db' in config:
+        env['PRODIGY_DB'] = config['db']
+    if 'db_settings' in config and config['db_settings']:
+        # Convert db_settings dict to environment variables
+        for key, value in config['db_settings'].items():
+            env[f'PRODIGY_DB_{key.upper()}'] = str(value)
+    
+    # Set logging if specified
+    if 'PRODIGY_LOGGING' in config:
+        env['PRODIGY_LOGGING'] = config['PRODIGY_LOGGING']
+    
     # Build command
     cmd = [
         'prodigy',
@@ -36,18 +60,26 @@ def run_prodigy(config):
         '--patterns', config['patterns_file']
     ]
     
-    # Add optional arguments if they exist
-    if 'batch_size' in config:
-        cmd.extend(['--batch-size', str(config['batch_size'])])
-    if 'show_instructions' in config and config['show_instructions']:
-        cmd.append('--show-instructions')
-    if 'auto_save' in config and config['auto_save']:
-        cmd.append('--auto-save')
+    # Add optional arguments if they exist (only valid for spans.manual)
+    if 'highlight_chars' in config and config['highlight_chars']:
+        cmd.append('--highlight-chars')
+    if 'edit_text' in config and config['edit_text']:
+        cmd.append('--edit-text')
+    if 'use_annotations' in config and config['use_annotations']:
+        cmd.append('--use-annotations')
     
     print(f"Running: {' '.join(cmd)}")
+    print(f"Host: {config.get('host', 'localhost (default)')}")
     print(f"Port: {config['port']}")
     print(f"Data file: {config['data_file']}")
     print(f"Labels: {config['labels']}")
+    print(f"CORS: {config.get('cors', False)}")
+    print(f"Validation: {config.get('validate', False)}")
+    
+    if config.get('host') == '0.0.0.0':
+        print("⚠️  Warning: Host set to 0.0.0.0 - Prodigy will be accessible from external networks")
+    else:
+        print("ℹ️  Prodigy will be accessible at http://localhost:{}".format(config['port']))
     
     # Run Prodigy
     try:

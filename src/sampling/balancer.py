@@ -14,11 +14,13 @@ logger = get_logger(__name__)
 class DataBalancer:
     """Balance data for 50/50 dialogue/non-dialogue splits."""
     
-    def __init__(self, random_seed: Optional[int] = None, patterns_file: Optional[Path] = None):
+    def __init__(self, random_seed: Optional[int] = None, patterns_file: Optional[Path] = None, 
+                 exceptions_file: Optional[Path] = None):
         """Initialize data balancer."""
         self.random_seed = random_seed
         self.logger = get_logger(self.__class__.__name__)
-        self.sampler = StratifiedSampler(random_seed=random_seed, patterns_file=patterns_file)
+        self.sampler = StratifiedSampler(random_seed=random_seed, patterns_file=patterns_file, 
+                                        exceptions_file=exceptions_file)
         self.formatter = ProdigyFormatter()
     
     def balance_gb_data(self, data_file: Path, sample_size: int, 
@@ -157,3 +159,7 @@ class DataBalancer:
             "phonetized_ratio": phonetized_ratio,
             "non_phonetized_ratio": 1 - phonetized_ratio
         }
+    
+    def save_pattern_usage_stats(self, output_file: Path, phonetized_count: int = None, non_phonetized_count: int = None) -> None:
+        """Save pattern usage statistics to a text file."""
+        self.sampler.save_pattern_usage_stats(output_file, phonetized_count, non_phonetized_count)

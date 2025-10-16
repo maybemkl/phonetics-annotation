@@ -1,6 +1,7 @@
 # Prodigy Configuration
 prodigy:
   # Server settings
+  # host: "0.0.0.0"  # Uncomment for AWS - allows external access
   port: 8081
   
   # Command settings
@@ -9,12 +10,28 @@ prodigy:
   model: en_core_web_sm
   
   # Data settings
-  data_file: data/processed/samples/balanced_sample_20251016_140158.jsonl
+  data_file: data/processed/samples/balanced_sample_20251016_153416.jsonl
   loader: jsonl
   labels: PHONETIC,NOT_DIALOGUE,ERROR
   patterns_file: patterns.jsonl
   
-  # Optional settings
-  # batch_size: 10
-  # show_instructions: true
-  # auto_save: true
+  # AWS-specific settings
+  cors: true  # Enable CORS for cross-origin requests
+  validate: true  # Enable task validation
+  
+  # Database settings (for production)
+  db: sqlite  # Change to postgresql or mysql for production
+  db_settings: {}  # Add database connection settings here
+  
+  # Security settings (set via environment variables in production)
+  # PRODIGY_BASIC_AUTH_USER: your_username
+  # PRODIGY_BASIC_AUTH_PASS: your_password
+  # PRODIGY_ALLOWED_SESSIONS: session1,session2,session3
+  
+  # Optional settings for spans.manual
+  highlight_chars: false  # Allow highlighting individual characters
+  edit_text: false  # Allow editing text during annotation
+  use_annotations: false  # Use annotations from spaCy model
+  
+  # Logging (set via environment variable in production)
+  # PRODIGY_LOGGING: basic  # or verbose for more detailed logs

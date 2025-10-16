@@ -1,0 +1,51 @@
+# Prodigy Configuration for AWS Deployment
+prodigy:
+  # Server settings - REQUIRED for AWS
+  host: "0.0.0.0"  # Allow external access
+  port: 8080  # Standard port for AWS load balancers
+  
+  # Command settings
+  command: spans.manual
+  dataset: phonetics_anno
+  model: en_core_web_sm
+  
+  # Data settings
+  data_file: /app/data/balanced_sample.jsonl  # Use absolute path in container
+  loader: jsonl
+  labels: PHONETIC,NOT_DIALOGUE,ERROR
+  patterns_file: /app/patterns.jsonl  # Use absolute path in container
+  
+  # AWS-specific settings
+  cors: true  # Enable CORS for cross-origin requests
+  validate: true  # Enable task validation
+  
+  # Database settings for production
+  db: postgresql  # Use PostgreSQL for production
+  db_settings:
+    host: "your-rds-endpoint.amazonaws.com"
+    port: 5432
+    user: "prodigy_user"
+    password: "your_password"  # Use AWS Secrets Manager in production
+    database: "prodigy_db"
+  
+  # Security settings (set via environment variables in production)
+  # These should be set in your AWS environment, not in the config file
+  # PRODIGY_BASIC_AUTH_USER: your_username
+  # PRODIGY_BASIC_AUTH_PASS: your_password
+  # PRODIGY_ALLOWED_SESSIONS: session1,session2,session3
+  
+  # Production settings for spans.manual
+  highlight_chars: false  # Allow highlighting individual characters
+  edit_text: false  # Allow editing text during annotation
+  use_annotations: false  # Use annotations from spaCy model
+  
+  # Logging
+  PRODIGY_LOGGING: basic  # Use 'verbose' for debugging
+  
+  # Additional AWS considerations:
+  # - Set up AWS Secrets Manager for sensitive data
+  # - Use AWS RDS for database
+  # - Configure security groups to allow port 8080
+  # - Use Application Load Balancer for SSL termination
+  # - Set up CloudWatch for logging
+  # - Use ECS/EKS for container orchestration

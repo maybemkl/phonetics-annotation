@@ -106,9 +106,11 @@ def main():
         logger.info(f"Phonetized ratio: {args.phonetized_ratio}")
         logger.info(f"Random seed: {args.random_seed}")
         
-        # Initialize balancer with patterns file
+        # Initialize balancer with patterns file and exceptions
         patterns_file = Path("patterns.jsonl")
-        balancer = DataBalancer(random_seed=args.random_seed, patterns_file=patterns_file)
+        exceptions_file = Path("pattern_exceptions.txt")
+        balancer = DataBalancer(random_seed=args.random_seed, patterns_file=patterns_file, 
+                               exceptions_file=exceptions_file)
         
         # Get Gemini files from directory if specified
         gemini_files = args.gemini_files
@@ -151,16 +153,25 @@ def main():
         # Get balance statistics
         stats = balancer.get_balance_statistics(balanced_data)
         logger.info(f"Balance statistics: {stats}")
-        
+
         # Generate timestamped output filename
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = args.output.parent / f"{args.output.stem}_{timestamp}{args.output.suffix}"
-        
+
         # Save balanced data
         balancer.save_balanced_data(balanced_data, output_path)
+
+        # Save pattern usage statistics with sample counts
+        pattern_stats_path = output_path.parent / f"{output_path.stem}_pattern_usage.txt"
+        balancer.save_pattern_usage_stats(
+            pattern_stats_path, 
+            phonetized_count=stats['phonetized'], 
+            non_phonetized_count=stats['non_phonetized']
+        )
         
         logger.info(f"Successfully sampled {len(balanced_data)} items")
         logger.info(f"Sampled data saved to: {output_path}")
+        logger.info(f"Pattern usage statistics saved to: {pattern_stats_path}")
         
         return 0
         
