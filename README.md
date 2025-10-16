@@ -153,6 +153,42 @@ mypy src/
 6. **Annotation**: Run Prodigy annotation interface
 7. **Output**: Export annotated results
 
+## AWS Deployment
+
+### Instance Recommendations
+- **t4g.small** (2 vCPU, 2GB RAM) - ~$12/month, perfect for Prodigy
+- **t4g.micro** (2 vCPU, 1GB RAM) - ~$6/month, good for light workloads
+
+### Security Group Configuration
+Allow these ports:
+- SSH (22) from your IP
+- HTTP (80) from anywhere  
+- Custom TCP (8080) from anywhere
+
+### Cost Optimization
+- Use Spot Instances for development
+- Stop instances when not in use
+- Set up auto-shutdown for non-production hours
+
+### Monitoring
+```bash
+# Health check
+curl -f http://localhost:8080/health || echo "Prodigy down"
+
+# Memory usage
+free -h
+htop
+```
+
+### Troubleshooting
+```bash
+# Port issues
+sudo netstat -tlnp | grep 8080
+
+# Permission issues  
+sudo chown -R ubuntu:ubuntu /home/ubuntu/phonetics-annotation
+```
+
 ## Contributing
 
 1. Fork the repository
